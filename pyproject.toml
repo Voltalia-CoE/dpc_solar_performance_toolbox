@@ -1,0 +1,11 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "solar_performance_toolbox"
+version = "0.0.0"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["solar_performance_toolbox*"]
