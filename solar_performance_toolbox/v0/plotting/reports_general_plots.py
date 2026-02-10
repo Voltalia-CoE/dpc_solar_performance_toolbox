@@ -260,7 +260,7 @@ def plot_waterfall(
 
 # %% YTD comparison plots
 def _plot_production_comparison_ytd(
-    df_monthly: pd.DataFrame, current_month: dt.datetime, percentage: bool = False, cumulative: bool = False
+    df_monthly: pd.DataFrame, current_month: dt.datetime, percentage: bool = False, cumulative: bool = False, *args, **kwargs
 ):
     fig, ax = plt.subplots(facecolor="white", layout="compressed", figsize=(9, 5.5))
 
@@ -382,6 +382,9 @@ def _plot_production_comparison_ytd(
     ax.set_xticks(df_m_ytd.index)
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%b/%Y"))  # Jan/2025, Feb/2025, Mar...
     ax.set_title(f"YTD Production Measured vs. Expected{cum_str}", fontsize=font)
+
+    ax.set(**kwargs)
+
     return fig
 
 
@@ -629,7 +632,7 @@ def _plot_energy_availability_ytd(df_monthly: pd.DataFrame, current_month: dt.da
     ax.tick_params(axis="both", labelsize=font2)
     ax.set_xticks(df_m_ytd.index)
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%b/%Y"))
-    ax.set_title("YTD Energy Availability Impact", fontsize=font)
+    ax.set_title("YTD Energy Availability", fontsize=font)
 
     # Y-limits with headroom for labels
     ymax = max(
@@ -647,6 +650,8 @@ def plot_comparison_ytd(
     target: str,
     percentage: bool = False,
     cumulative: bool = False,
+    *args,
+    **kwargs,
 ):
     
     if cumulative:
@@ -654,18 +659,18 @@ def plot_comparison_ytd(
 
     match target.lower():
         case "production":
-            return _plot_production_comparison_ytd(df_monthly, current_month, percentage, cumulative)
+            return _plot_production_comparison_ytd(df_monthly, current_month, percentage, cumulative, *args, **kwargs)
         case "irradiation":
-            return _plot_resource_comparison_ytd(df_monthly, current_month, percentage, cumulative)
+            return _plot_resource_comparison_ytd(df_monthly, current_month, percentage, cumulative, *args, **kwargs)
         # case "poa":
         #     return _plot_poa_comparison_ytd(df_monthly, current_month)
         # case "poa_gain":
         #     return _plot_poa_gain_comparison_ytd(df_monthly, current_month)
         case "curtailment":
             return _plot_curtailment_comparison_ytd(
-                df_monthly, current_month
+                df_monthly, current_month, *args, **kwargs
             )
         case "availability":
-            return _plot_energy_availability_ytd(df_monthly, current_month)
+            return _plot_energy_availability_ytd(df_monthly, current_month, *args, **kwargs)
         case _:
             raise NotImplementedError(f"Comparison plot for '{target}' not implemented")
