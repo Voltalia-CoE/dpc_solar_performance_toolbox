@@ -182,3 +182,4 @@ cython_debug/
 
 # Testing Things
 test_scripts/test_files/*
+*.env
